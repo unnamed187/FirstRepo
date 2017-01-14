@@ -1,0 +1,116 @@
+---
+title: "lab2"
+author: "Makukha.da"
+date: '14 января 2017 г '
+output: html_document
+---
+
+##Задание 1
+```{r setup, include=FALSE}
+library(MASS)
+data(Cars93)
+
+summary(Cars93)
+
+
+mean(Cars93$Price[Cars93$DriveTrain=="Rear"])
+
+min(Cars93$Horsepower[Cars93$Passengers==6])
+min(Cars93$Horsepower[Cars93$Passengers==7])
+
+
+distance <- Cars93$MPG.highway*Cars93$Fuel.tank.capacity
+Cars93[distance==max(distance), 1:2]
+Cars93[distance==min(distance), 1:2]
+Cars93[distance==median(distance), 1:2]
+```
+##Задание 2
+```{r}
+factory.run <- function (o.cars=1, o.trucks=1) {
+  factory <- matrix(c(40,1,60,3),nrow=2, dimnames=list(c("трудодни","сталь"),c("автомобили","грузовики")))
+  warehouse <- c(1600,70) #Доступно материалов на складе
+  names(warehouse) <- rownames(factory)
+  reserve <- c(8,1)
+  names(reserve) <- rownames(factory)
+  output <- c(o.cars, o.trucks)
+  names(output) <- colnames(factory)
+
+  steps <- 0 # Счётчик числа шагов цикла
+  repeat {
+    steps <- steps + 1
+    needed <- factory %*% output # Подсчитаем ресурсы, которые нам нужны для производства требуемого кол-ва машин
+    message(steps)
+    print(needed)
+    # Если ресурсов достаточно и остаток меньше или равен резерву, то мы произвели максимум возможного.
+    # Нужно прекращать
+    if (all(needed <= warehouse) && all((warehouse - needed) <= reserve)) {
+      break()
+    }
+    # Если заявка слишком большая и ресурсов недостаточно, уменьшим её на 10%
+    if (all(needed > warehouse)) {
+      output <- output * 0.9
+      next()
+    }
+    # Если всё наоброт, то увеличим на 10%
+    if (all(needed < warehouse)) {
+      output <- output * 1.1
+      next()
+    }
+    # Если мы потребили одного ресурса слишком много, а другого недостаточно,
+    # то увеличим план на случайную величину
+    output <- output * (1+runif(length(output),min=-0.1,max=0.1))
+  }
+
+  return(output)
+}
+
+
+
+factory.run()
+```
+```{r}
+#Измените функцию так, чтобы она возвращала число шагов и произведённое количество машин
+factory.run <- function (o.cars=1, o.trucks=1) {
+  factory <- matrix(c(40,1,60,3),nrow=2, dimnames=list(c("трудодни","сталь"),c("автомобили","грузовики")))
+  warehouse <- c(1600,70) #Доступно материалов на складе
+  names(warehouse) <- rownames(factory)
+  reserve <- c(8,1)
+  names(reserve) <- rownames(factory)
+  output <- c(o.cars, o.trucks)
+  names(output) <- colnames(factory)
+
+  steps <- 0 # Счётчик 
+  names(steps) <- "шаги"
+  repeat {
+    steps <- steps + 1
+    needed <- factory %*% output 
+    names(needed) <-rownames(factory)
+    
+    if (all(needed <= warehouse) && all((warehouse - needed) <= reserve)) {
+      break()
+    }
+    
+    if (all(needed > warehouse)) {
+      output <- output * 0.9
+      next()
+    }
+    
+    if (all(needed < warehouse)) {
+      output <- output * 1.1
+      next()
+    }
+
+    output <- output * (1+runif(length(output),min=-0.1,max=0.1))
+  }
+
+  return(c(steps,output,needed))
+}
+
+factory.run()
+
+factory.run(30,20)
+
+```
+результат: 10 автомобилей и 19 грузовиков, итоговый запрос ресурсов: трудодни-1598 и сталь-69,чтобы получить ответ пришлось использовать 950 итераций
+
+
