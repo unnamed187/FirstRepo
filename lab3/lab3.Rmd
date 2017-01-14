@@ -1,0 +1,63 @@
+---
+title: "lab3"
+author: "Makukha.da"
+date: '14 января 2017 г '
+output: html_document
+---
+## Задание 1
+```{r}
+
+rl <- readLines("https://raw.githubusercontent.com/SergeyMirvoda/da2016/master/data/forbes.htm")
+length(rl)
+sum(nchar(rl))
+```
+Размеры доходов:
+Билл Гейтс - 72
+Ларри Эллисон - 41
+```{r}
+pat <- "[$](\\d{1,2}[,]?\\d?)\\s"
+profit <- grep(pat,rl)
+length(profit)
+re <- regexpr(pat,rl)
+rm <- regmatches(rl,re)
+length(rm)
+rm[1]
+length(rm[rm == "$72 "])
+length(rm[rm == "$41 "])
+length(rm[rm == "$5,2 "])
+```
+## Задание 2
+```{r}
+worths<-substr(rm,2,nchar(rm))
+worths<-sub(",",".",worths)
+worths<-as.numeric(worths)*10**9
+
+length(worths)
+typeof(worths)
+
+length(worths[worths>=10**9])
+
+if((max(worths)/10**9) == 72)
+{
+  print("Это доход Билла Гейтса")
+}
+
+median(worths)/10**9
+min(worths)/10**9
+
+
+length(worths[worths>5*10**9])
+length(worths[worths>10*10**9])
+length(worths[worths>25*10**9])
+
+sum(worths)/10**9
+sum(worths[1:5])/sum(worths)
+sum(worths[1:20])/sum(worths)
+
+hnw <- 89063*10**9
+sum(worths)/hnw
+
+
+
+
+```
