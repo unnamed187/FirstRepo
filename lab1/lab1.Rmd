@@ -1,0 +1,84 @@
+---
+title: "lab1"
+author: "Makukha.da"
+date: '14 января 2017 г '
+output: html_document
+---
+## Задание 1
+```{r setup, include=FALSE}
+exp.1 <- rexp(n=200,rate = 1)
+exp0.1 <- rexp(n=200,rate = 0.1)
+exp0.5 <- rexp(n=200,rate = 0.5)
+exp5 <- rexp(n=200,rate = 5)
+exp10 <- rexp(n=200,rate = 10)
+layout(mat=matrix(c(1,1,2,2,3,3,0,4,4,5,5,0), nrow = 2, byrow=TRUE))
+
+hist(exp.1,breaks = 20)
+hist(exp0.1,breaks = 20)
+hist(exp0.5,breaks = 20)
+hist(exp5,breaks = 20)
+hist(exp10,breaks = 20)
+
+layout(mat=matrix(c(1,1,2,2,3,3,0,4,4,5,5,0), nrow = 2, byrow=TRUE))
+plot(exp.1)
+plot(exp0.1)
+plot(exp0.5)
+plot(exp5)
+plot(exp10)R
+
+plot(exp.1, exp5, xlab = "Exp.1", ylab = "Exp5")
+
+exp.means <- rep(c(mean(exp.1),mean(exp0.1),mean(exp0.5),mean(exp5),mean(exp10)),times=40)
+
+exp.sd <- rep(c(sd(exp.1),sd(exp0.1),sd(exp0.5),sd(exp5),sd(exp10)),times=40)
+
+layout(mat=matrix(c(1,1,2,2,3,3,0,4,4,5,5,0), nrow = 2, byrow=TRUE))
+plot(exp.means,exp.1)
+plot(exp.means,exp0.1)
+plot(exp.means,exp0.5)
+plot(exp.means,exp5)
+plot(exp.means,exp10)
+
+layout(mat=matrix(c(1,1,2,2,3,3,0,4,4,5,5,0), nrow = 2, byrow=TRUE))
+plot(exp.sd,exp.1)
+plot(exp.sd,exp0.1)
+plot(exp.sd,exp0.5)
+plot(exp.sd,exp5)
+plot(exp.sd,exp10)
+
+plot(exp.means,exp.sd)
+
+
+```
+##Задание 2
+```{r}
+huge.exp.1 <- rexp(n=1100000)
+mean(huge.exp.1)
+sd(huge.exp.1)
+
+hist(huge.exp.1,breaks = 100)
+plot(huge.exp.1)
+
+"Не соответствует  и не должна"
+
+mean(huge.exp.1[huge.exp.1>1])
+
+"Матрица 1100 строк х 1000 колонок"
+
+huge.exp.1.mat <- matrix(huge.exp.1,ncol=1100)
+hist(huge.exp.1.mat,breaks = 100)
+
+"Рассчет среднего в 137 колонке"
+
+mean(huge.exp.1.mat[,137])
+
+"Среднее по 1000 колонкам и гистограмма"
+
+vector.mean.1000 <- colMeans(huge.exp.1.mat)
+hist(vector.mean.1000)
+
+huge.exp.1.pow2 <- huge.exp.1^2
+mean(huge.exp.1.pow2)
+sd(huge.exp.1.pow2)
+```
+
